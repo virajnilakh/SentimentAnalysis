@@ -44,3 +44,61 @@ for l in lines:
             nindex += 1
             neg[nindex] = l[2:]
         flag = 0
+'''print "relearning"
+#relearning
+with open('./test.dat', 'r') as fh:
+    lines = fh.readlines()
+
+test=[""]
+ind=0
+for l in lines:
+    test[ind]=test[ind]+l
+    if "\n" in l:
+        ind+=1
+        test.append("")
+test=test[:-1]
+with open('./ans26.dat', 'r') as fh:
+    lines = fh.readlines()
+rind=0
+for l in test:
+    if lines[rind]=="+1\n":
+        pos.append(l)
+    else:
+        neg.append(l)
+    rind+=1'''
+pindex=0
+nindex=0
+#pos=pos[:50]
+#neg=neg[:50]
+print "creating document of words"
+#creates documents of words
+for l in pos:
+    pos[pindex]=getWords(l)
+    pindex+=1
+for l in neg:
+    neg[nindex]=getWords(l)
+    nindex+=1
+print "indexing"
+#indexing
+index={}
+c=0
+for l in pos+neg:
+    for w in l:
+        w = w.lower()
+        #w = stem(w)
+        if w in stop_words:
+            continue
+        if w not in index:
+            index[w]=c
+            c+=1
+'''pos_str=""
+neg_str=''
+for l in pos:
+    for w in l:
+        pos_str+=(w+" ")
+for l in neg:
+    for w in l:
+        neg_str+=(w+" ")
+'''
+print "word-freq format"
+print "pos word freq"
