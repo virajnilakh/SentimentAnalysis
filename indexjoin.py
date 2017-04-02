@@ -102,3 +102,82 @@ for l in neg:
 '''
 print "word-freq format"
 print "pos word freq"
+#converts document in word-freq format
+pos_dict=[]
+for d in pos:
+    p={}
+    pd={}
+    for w in d:
+
+        w = w.lower()
+        #w=stem(w)
+        if w in stop_words:
+            continue
+        if index[w] not in p:
+            pd[w]=1
+            p[index[w]] = 1
+        else:
+            pd[w]+=1
+            p[index[w]] += 1
+    pos_dict.append(p)
+    #print pd
+
+neg_dict=[]
+for d in neg:
+    n={}
+    nd={}
+    for w in d:
+        w = w.lower()
+        #w = stem(w)
+        if w in stop_words:
+            continue
+        if index[w] not in n:
+            n[index[w]] = 1
+            nd[w]=1
+        else:
+            n[index[w]] += 1
+            nd[w]+=1
+    neg_dict.append(n)
+    #print nd
+print "normalizing"
+for l in pos_dict+neg_dict:
+    l=normalize(l)
+
+
+'''print "tf-idf"
+#tfidf
+for w in index:
+    c1=0
+    c2=0
+    for l in pos_dict:
+        if index[w] in l:
+            c1+=1
+    for l in neg_dict:
+        if index[w] in l:
+            c2+=1
+    for l in pos_dict:
+        if index[w] in l:
+            l[index[w]]*=len(neg_dict)/c1
+    for l in neg_dict:
+        if index[w] in l:
+            l[index[w]]*=len(pos_dict)/c2'''
+print "contructinng feature matrix"
+#contructinng feature matrix
+index = sorted(index.items(), key=operator.itemgetter(1))
+print "sorting done"
+feature=[]
+for v in index:
+    f={}
+    for j in range(len(pos_dict)):
+        if v[1] in pos_dict[j]:
+            f[j]=pos_dict[j][v[1]]
+    for j in range(len(neg_dict)):
+        if v[1] in neg_dict[j]:
+            f[-j]=neg_dict[j][v[1]]
+    feature.append(f)
+other={}
+for v in index:
+    other[v[0]]=v[1]
+index=other
+
+print "test input"
