@@ -181,3 +181,97 @@ for v in index:
 index=other
 
 print "test input"
+#test
+with open('./test.dat', 'r') as fh:
+    lines = fh.readlines()
+
+test=[""]
+ind=0
+for l in lines:
+    test[ind]=test[ind]+l
+    if "\n" in l:
+        ind+=1
+        test.append("")
+test=test[:-1]
+
+ind=0
+ans_a=[]
+f = open("ans25.dat", "w+")
+for t in test:
+    ans=0
+    pos_ans = {}
+    neg_ans = {}
+    pindex = 0
+    nindex = 0
+    test_dict = {}
+    t=getWords(t)
+    for w in t:
+        w = w.lower()
+        #w = stem(w)
+        if w in stop_words:
+            continue
+        if w not in test_dict:
+            test_dict[w] = 1
+        else:
+            test_dict[w] = test_dict[w] + 1
+
+
+    test_dict=normalize(test_dict)
+    for k,v in test_dict.iteritems():
+        if k in index:
+            for j,u in feature[index[k]].iteritems():
+                if j>0:
+                    if j in pos_ans:
+                        pos_ans[j]+=v*u
+                    else:
+                        pos_ans[j]=0
+                else:
+                    if j in neg_ans:
+                        neg_ans[j]+=v*u
+                    else:
+                        neg_ans[j]=0
+    pos_ans = sorted(pos_ans.items(), key=operator.itemgetter(1))
+    pos_ans = pos_ans[-25:]
+    neg_ans = sorted(neg_ans.items(), key=operator.itemgetter(1))
+    neg_ans = neg_ans[-25:]
+    for v in pos_ans:
+        ans += v[1]
+    for v in neg_ans:
+        ans -= v[1]
+    if ans >= 0:
+        ans_a.append("+1")
+        f.write("+1\n")
+    else:
+        ans_a.append("-1")
+        f.write("-1\n")
+
+    '''for p in pos_dict:
+        pos_ans.append(0)
+        for k,v in test_dict.iteritems():
+            #print k,v
+            if k not in index:
+                continue
+            if index[k] in p:
+                pos_ans[pindex]+=p[index[k]]*v
+        pindex+=1
+    for n in neg_dict:
+        neg_ans.append(0)
+        for k,v in test_dict.iteritems():
+            if k not in index:
+                continue
+            if index[k] in n:
+                neg_ans[nindex]+=n[index[k]]*v
+        nindex+=1
+    pos_ans.sort(reverse=True)
+    neg_ans.sort(reverse=True)
+    for v in pos_ans[:10]:
+        ans+=v
+    for v in neg_ans[:10]:
+        ans-=v
+    if v>0:
+        ans_a.append("+1")
+        f.write("+1\n")
+    else:
+        ans_a.append("-1")
+        f.write("-1\n")'''
+
